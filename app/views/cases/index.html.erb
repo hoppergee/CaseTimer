@@ -16,63 +16,17 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4">
-      <div class="thumbnail">
-        <a href="">
+  <% @cases.each do |item| %>
+    <div class="col-md-4">
+      <div class="thumbnail" id="case_thumbnail_<%= item.id %>">
+        <%= link_to case_path(item) do %>
           <div class="caption">
-            <h2>Rails 101</h2>
+            <h2><%= item.title %></h2>
           </div>
-        </a>
+        <% end %>
       </div>
     </div>
-    <div class="col-md-4">
-        <div class="thumbnail">
-          <a href="http://localhost:3000/cases/1">
-            <div class="caption">
-              <h2>Job Listing</h2>
-            </div>
-          </a>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="thumbnail">
-          <a href="">
-            <div class="caption">
-              <h2>JD Store</h2>
-            </div>
-          </a>
-        </div>
-    </div>
+  <% end %>
 </div>
 
-<div class="row">
-  <div class="col-md-4">
-      <div class="thumbnail">
-        <a href="">
-          <div class="caption">
-            <h2>A jax</h2>
-          </div>
-        </a>
-      </div>
-    </div>
-    <div class="col-md-4">
-        <div class="thumbnail">
-          <a href="">
-            <div class="caption">
-              <h2>Rails 百宝箱1</h2>
-            </div>
-          </a>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="thumbnail">
-          <a href="">
-            <div class="caption">
-              <h2>Rails 百宝箱2</h2>
-            </div>
-          </a>
-        </div>
-    </div>
-</div>
-
-<body>
+</body>
