@@ -42,24 +42,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>第一步</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>第二步</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>第三步</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
+                <% @tasks.each do |task| %>
+                    <tr>
+                      <td><%= task.description %></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                <% end %>
+
               </tbody>
             </table>
         </div>
