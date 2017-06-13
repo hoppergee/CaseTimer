@@ -4,7 +4,8 @@
 <div id="myStopTime"></div>
 <button onclick="myStartFunction()">开始</button>
 <button onclick="myStopFunction()" >结束</button>
-<%= link_to "停止", tasks_path, id:"my_stop_btn" %>
+<%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn" %>
+
 
 <script>
 
@@ -27,7 +28,8 @@ function myTimer() {
   + minutes + "分 " + seconds + "秒 ";
 }
 
-$("#my_stop_btn").on('click', function(){
+$("#my_stop_btn").on('click', function(evt){
+	evt.preventDefault();
 	clearInterval(x);
 	var url = $(this).attr("href")
 	console.log(url)
@@ -35,6 +37,7 @@ $("#my_stop_btn").on('click', function(){
 	$.ajax({
 		url: url,
 		method: "POST",
+		beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
 		dataType: "json",
 		data: {
 			practice_time: distance
