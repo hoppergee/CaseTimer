@@ -7,6 +7,7 @@
 </head>
 
 <body>
+<% binding.pry %>
   <div class="row">
     <h1 style="text-align: center"> Rails 101 </h1>
   </div>
@@ -63,3 +64,5 @@
     </div>
   </div>
 </body>
+
+<%= render "timer", locals: { case: @case } %>

@@ -21,8 +21,20 @@
       <li><a href="#">Page 2</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <% if current_user %>
+        <li><h3 style="color: white;"><%= current_user.email %></h3></li>
+      <% else %>
+        <li>
+          <%= link_to new_user_registration_path do %>
+            <span class="glyphicon glyphicon-user"></span> Sign Up
+          <% end %>
+        </li>
+        <li>
+          <%= link_to new_user_session_path do %>
+            <span class="glyphicon glyphicon-user"></span> Log in
+          <% end %>
+        </li>
+        <% end %>
     </ul>
   </div>
 </nav>

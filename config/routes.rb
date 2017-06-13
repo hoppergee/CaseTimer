@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   root "cases#index"
   # root 'welcome#index'
 
-  resources :cases
+  resources :cases do
+  	member do
+  		post :update_timer
+  	end
+  end
 
   resources :tasks
 
