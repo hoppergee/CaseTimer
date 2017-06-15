@@ -16,7 +16,7 @@
 </div>
 
 <div class="row">
-  <% @cases.each do |item| %>
+  <% @standard_cases.each do |item| %>
     <div class="col-md-4">
       <div class="thumbnail" id="case_thumbnail_<%= item.id %>">
         <%= link_to case_path(item) do %>
@@ -28,5 +28,19 @@
     </div>
   <% end %>
 </div>
+
+<% unless @private_cases.blank? %>
+  <% @private_cases.each do |item| %>
+    <div class="col-md-4">
+      <div class="thumbnail" id="case_thumbnail_<%= item.id %>">
+        <%= link_to case_path(item) do %>
+          <div class="caption">
+            <h2><%= item.title %></h2>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
 
 </body>

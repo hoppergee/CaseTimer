@@ -6,6 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+
 u = User.create(email: "admin@qq.com", password: "123456")
 u.save
 
@@ -21,13 +22,13 @@ jd_tasks = [{title: "第一步", description: "项目准备"},
 			{title: "第三步", description: "后台搭建"}]
 
 case_item.each do |item|
-	c = Case.create(title: item[:title], description: item[:description])
+	c = Case.create(title: item[:title], description: item[:description], user_id: u.id)
 	if c.title == "JDStore"
+		ttg = TaskTemplatesGroup.create(user_id: u.id, case_id: c.id)
 		jd_tasks.each do |task_item|
-			Task.create(title: task_item[:title],
+			TaskTemplate.create(title: task_item[:title],
 					description: task_item[:description],
-					user_id: u.id,
-					case_id: c.id
+					task_templates_group_id: ttg.id
 					)
 		end
 	end

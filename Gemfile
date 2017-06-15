@@ -44,6 +44,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'sqlite3'
   gem 'pry'
+  gem 'pry-byebug'
 end
 
 group :development do
