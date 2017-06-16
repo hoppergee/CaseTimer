@@ -7,9 +7,12 @@ Rails.application.routes.draw do
   resources :cases do
   	member do
   		post :update_timer
+  		post :select_template
   	end
   end
 
   resources :tasks
+
+  resources :task_templates_groups
 
 end

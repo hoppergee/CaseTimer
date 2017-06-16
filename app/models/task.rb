@@ -4,7 +4,13 @@ class Task < ApplicationRecord
 	# belongs_to :task_group
 
 	def siblings
-		self.task_template.tasks.order("created_at")
+		tasks = []
+		# self.task_template.tasks.where(round: self.round).order("created_at")
+		self.task_template.group.task_templates.each do |template|
+			task = template.tasks.find_by(round: self.round)
+			tasks << task
+		end
+		tasks.sort_by { |t| t.created_at }
 	end
 
 	def done?
@@ -17,13 +23,6 @@ class Task < ApplicationRecord
 		end
 	end
 
-	def humanize(secs)
-		[[60, "秒"], [60, "分"], [24, "小时"], [1000, "天"]].map{|count, name|
-			if secs > 0
-				secs, n = secs.divmod(count)
-				"#{n.to_i} #{name}"
-			end
-		}.compact.reverse.join(' ')
-	end
+
 
 end

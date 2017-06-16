@@ -1,1 +1,24 @@
-
+<% @task_templates_groups.each do |group| %>
+	<div><%= group.id %></div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Group<%= group.id %></div>
+		<table class="table">
+			<thaed>
+				<tr>
+					<% group.templates.each do |template| %>
+						<th><%= template.title %></th>
+					<% end %>
+				</tr>
+			</thaed>
+			<tbody>
+				<% group.round_group_tasks.each do |tasks| %>
+					<tr>
+						<% tasks.each do |task| %>
+							<td><%= task.practice_time_str %></td>
+						<% end %>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+<% end %>

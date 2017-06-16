@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170614092633) do
+ActiveRecord::Schema.define(version: 20170616045007) do
 
   create_table "cases", force: :cascade do |t|
     t.datetime "created_at",  null: false
@@ -18,6 +18,15 @@ ActiveRecord::Schema.define(version: 20170614092633) do
     t.string   "title"
     t.text     "description"
     t.integer  "user_id"
+  end
+
+  create_table "favors", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "case_id"
+    t.integer  "goal",                    default: 3
+    t.integer  "task_templates_group_id"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   create_table "grades", force: :cascade do |t|
@@ -54,6 +63,7 @@ ActiveRecord::Schema.define(version: 20170614092633) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "target_round"
+    t.index [nil], name: "index_task_templates_groups_on_task_template_id"
   end
 
   create_table "tasks", force: :cascade do |t|
