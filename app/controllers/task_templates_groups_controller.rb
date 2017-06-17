@@ -13,10 +13,10 @@ class TaskTemplatesGroupsController < ApplicationController
 		@group.user = current_user
 
 		if @group.save!
-			binding.pry
+			# binding.pry
 			round = Grade.where(user_id: current_user, case_id: @case).order("created_at").last.round + 1
-			Grade.create!(user: current_user, case: @case, finish: false, round: round, round_time: 0)
-			binding.pry
+			Grade.create!(user: current_user, case: @case, group: @group, finish: false, round: round, round_time: 0)
+			# binding.pry
 			@group.templates.each do |template|
 				Task.create!(round: round, task_template_id: template.id, title: template.title)
 			end

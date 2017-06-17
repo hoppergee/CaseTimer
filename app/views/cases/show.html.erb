@@ -18,8 +18,8 @@
 
   <div>目标轮次：<span><%= @favor.goal %></span></div>
 
-  <% @grades.each do |grade| %>
-    <div>第<%= grade.round %>次，用时<%= grade.round_time_str %></div>
+  <% @grades.each_with_index do |grade, index| %>
+    <div>第<%= index+1 %>次，用时<%= grade.round_time_str %></div>
   <% end %>
 
   <div class="row">

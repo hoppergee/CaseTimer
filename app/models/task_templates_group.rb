@@ -17,11 +17,10 @@ class TaskTemplatesGroup < ApplicationRecord
 	def round_group_tasks
 		group_tasks = []
 		all_tasks = self.all_tasks
-		last = all_tasks.sort_by{|t| t.created_at }.last
-		if last 
-			round = last.round
-			round.times do |i|
-				group_tasks << all_tasks.select{ |t| t.round == i }
+		unless all_tasks.empty?
+			rounds = self.templates.first.tasks.map{|t| t.round}
+			rounds.each do |round|
+				group_tasks << all_tasks.select{|t| t.round == round}
 			end
 		end
 		group_tasks

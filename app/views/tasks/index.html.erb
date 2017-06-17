@@ -1,7 +1,6 @@
-<% @task_templates_groups.each do |group| %>
-	<div><%= group.id %></div>
+<% @task_templates_groups.each_with_index do |group, index| %>
 	<div class="panel panel-default">
-		<div class="panel-heading">Group<%= group.id %></div>
+		<div class="panel-heading">模版<%= index %></div>
 		<table class="table">
 			<thaed>
 				<tr>
