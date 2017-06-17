@@ -1,3 +1,5 @@
+require 'will_paginate/array'
+
 class CasesController < ApplicationController
 
 	before_action :authenticate_user!, except: [:index]
@@ -60,6 +62,10 @@ class CasesController < ApplicationController
 		@task_templates_groups = TaskTemplatesGroup.where(user: current_user, case: @case)
 	end
 
+	def update_goal
+		
+	end
+
 	def select_template
 		group = TaskTemplatesGroup.find(params[:group_id])
 		@case = Case.find(params[:id])
@@ -96,6 +102,28 @@ class CasesController < ApplicationController
 				finish: ""
 			}
 		end
+	end
+
+	def ranking
+		@case = Case.find(params[:id])
+		users = User.all - [User.first]
+		case params[:demand]
+		when "round"
+			@round_users = users.sort{|a,b| b.round_of(@case.id) <=> a.round_of(@case.id)}
+		when "average"
+			@average_users = users.sort{|a,b| a.average_time_of(@case.id) <=> b.average_time_of(@case.id)}
+		when "fast"
+			@fast_users = users.sort{|a,b| a.fastest_time_of(@case.id) <=> b.fastest_time_of(@case.id)}
+		when "total"
+			@total_users = users.sort{|a,b| b.total_time_of(@case.id) <=> a.total_time_of(@case.id)}
+		else
+			@round_users = users.sort{|a,b| b.round_of(@case.id) <=> a.round_of(@case.id)}[0..4]
+			@average_users = users.sort{|a,b| a.average_time_of(@case.id) <=> b.average_time_of(@case.id)}[0..4]
+			@fast_users = users.sort{|a,b| a.fastest_time_of(@case.id) <=> b.fastest_time_of(@case.id)}[0..4]
+			@total_users = users.sort{|a,b| b.total_time_of(@case.id) <=> a.total_time_of(@case.id)}[0..4]
+		end
+		
+
 	end
 
 	def humanize(secs)

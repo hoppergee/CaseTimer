@@ -1,0 +1,112 @@
+<br>
+<%= link_to ranking_case_path(@case) ,style: "color: black;" do  %>
+<h2 class="text-center"><%= @case.title %> 排行榜</h2>
+<% end %>
+<br>
+
+<% if @round_users %>
+<div class="col-md-6 col-md-offset-3">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			练习次数最多
+			<%= link_to("更多", ranking_case_path(@case, demand: "round"), class:"label label-default pull-right", style:"font-size: 0.9em;") %>
+		</div>
+		<table class="table table-responsive">
+			<thead>
+				<tr>
+					<th>排名</th>
+					<th>名字</th>
+					<th>练习次数</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @round_users.each_with_index do |user, index| %>
+					<tr>
+						<td><%= index+1 %></td>
+						<td><%= user.email %></td>
+						<td><%= user.round_of(@case.id) %>次</td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<% end %>
+
+<% if @average_users %>
+<div class="col-md-6 col-md-offset-3">
+	<div class="panel panel-default">
+	<div class="panel-heading">单次平均用时最少<%= link_to("更多", ranking_case_path(@case, demand: "average"), class:"label label-default pull-right", style:"font-size: 0.9em;") %></div>
+	<table class="table table-responsive">
+		<thead>
+			<tr>
+				<th>排名</th>
+				<th>名字</th>
+				<th>用时</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @average_users.each_with_index do |user, index| %>
+				<tr>
+					<td><%= index+1 %></td>
+					<td><%= user.email %></td>
+					<td><%= humanize(user.average_time_of(@case.id)/1000) %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+	</div>
+</div>
+<% end %>
+
+<% if @fast_users %>
+<div class="col-md-6 col-md-offset-3">
+	<div class="panel panel-default">
+		<div class="panel-heading">单次用时最短<%= link_to("更多", ranking_case_path(@case, demand: "fast"), class:"label label-default pull-right", style:"font-size: 0.9em;") %></div>
+		<table class="table table-responsive">
+			<thead>
+				<tr>
+					<th>排名</th>
+					<th>名字</th>
+					<th>用时</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @fast_users.each_with_index do |user, index| %>
+					<tr>
+						<td><%= index+1 %></td>
+						<td><%= user.email %></td>
+						<td><%= humanize(user.fastest_time_of(@case.id)/1000) %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<% end %>
+
+<% if @total_users %>
+<div class="col-md-6 col-md-offset-3">
+	<div class="panel panel-default">
+		<div class="panel-heading">项目练习总时长最长<%= link_to("更多", ranking_case_path(@case, demand: "total"), class:"label label-default pull-right", style:"font-size: 0.9em;") %></div>
+		<table class="table table-responsive">
+			<thead>
+				<tr>
+					<th>排名</th>
+					<th>名字</th>
+					<th>总时长</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @total_users.each_with_index do |user, index| %>
+					<tr>
+						<td><%= index+1 %></td>
+						<td><%= user.email %></td>
+						<td><%= humanize(user.total_time_of(@case.id)/1000) %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<% end %>

@@ -40,6 +40,10 @@
     </div>
   </div>
 
+<!--   <div class="row">
+    <%#= form_tag  %>
+  </div> -->
+
 
 
   <div class="row">
@@ -57,6 +61,8 @@
               </ul>
             </div>
             <%= link_to("+创建新模版", new_task_templates_group_path(case_id: @case), class:"btn btn-default pull-left") %>
+            <%= link_to("查看所有练习信息", tasks_path(case_id: @case), class: "btn btn-default") %>
+            <%= link_to("排行榜", ranking_case_path, class: "btn btn-danger") %>
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -104,20 +110,10 @@
 
   <div row>
     <div class="col-md-offset-10">
-      <!-- <button type="button" class="btn btn-danger">当前总用时</button> -->
       <h4>总计： <span id="my_total_time_label"><%= @grade.round_time_str %></span></h4>
-      <%= link_to("查看所有练习信息", tasks_path(case_id: @case), class: "btn btn-default") %>
     </div>
   </div>
 </body>
-
-<h3>Timer</h3>
-<p id="demo"></p>
-<div id="myStartTime"></div>
-<div id="myStopTime"></div>
-<button onclick="myStartFunction()">开始</button>
-<button onclick="myStopFunction()" >结束</button>
-<%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn" %>
 
 
 <script>

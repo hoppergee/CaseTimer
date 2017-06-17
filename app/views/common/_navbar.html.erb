@@ -18,6 +18,7 @@
     <ul class="nav navbar-nav navbar-right">
       <% if current_user %>
         <li><h3 style="color: white;"><%= current_user.email %></h3></li>
+        <li><h4 style="colof: white;"><%= link_to("注销", destroy_user_session_path, method: :delete) %></h4></li>
       <% else %>
         <li>
           <%= link_to new_user_registration_path do %>
@@ -29,7 +30,7 @@
             <span class="glyphicon glyphicon-user"></span> Log in
           <% end %>
         </li>
-        <% end %>
+      <% end %>
     </ul>
   </div>
 </nav>
