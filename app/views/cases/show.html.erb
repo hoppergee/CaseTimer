@@ -7,10 +7,20 @@
 </head>
 
 <body>
-<% binding.pry %>
   <div class="row">
-    <h1 style="text-align: center"> Rails 101 </h1>
+    <h1 style="text-align: center"> <%= @case.title %> </h1>
   </div>
+
+  <div>平均用时: <span><%= average_time_of(@grades) %></span></div>
+  <div>练习次数: <span><%= round_of(@grades) %></span></div>
+  <div>最快纪录: <span><%= fastest_time_of(@grades) %></span></div>
+  <div>总练习时长: <span><%= total_time_of(@grades) %></span></div>
+
+  <div>目标轮次：<span><%= @favor.goal %></span></div>
+
+  <% @grades.each_with_index do |grade, index| %>
+    <div>第<%= index+1 %>次，用时<%= grade.round_time_str %></div>
+  <% end %>
 
   <div class="row">
     <div class="col-md-10">
@@ -30,9 +40,29 @@
     </div>
   </div>
 
+<!--   <div class="row">
+    <%#= form_tag  %>
+  </div> -->
+
+
+
   <div class="row">
     <div class="col-md-10">
         <div class="container">
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle pull-left" data-toggle="dropdown">
+                <%= "模版#{@task_templates_groups.index(@favor.group)+1}" %>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">                
+                <% @task_templates_groups.each_with_index do |group, index| %>
+                  <li><%= link_to("模版#{index+1}", select_template_case_path(@case, group_id: group), method: :post) %></li>
+                <% end %>
+              </ul>
+            </div>
+            <%= link_to("+创建新模版", new_task_templates_group_path(case_id: @case), class:"btn btn-default pull-left") %>
+            <%= link_to("查看所有练习信息", tasks_path(case_id: @case), class: "btn btn-default") %>
+            <%= link_to("排行榜", ranking_case_path, class: "btn btn-danger") %>
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -45,10 +75,25 @@
               <tbody>
                 <% @tasks.each do |task| %>
                     <tr>
+                      <td><%= task.title %></td>
                       <td><%= task.description %></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <%# binding.pry %>
+                      <% t = @tasks.find{|x| !x.practice_time.present?} %>
+                      <% if task.practice_time.present? %>
+                        <td><span id="timer_label_<%= task.id %>"><%= task.practice_time_str %></span></td>
+                        <td></td>
+                      <% else %>
+                        <td><span id="timer_label_<%= task.id %>"></span></td>
+                        <td>
+                          <% if t == task %>
+                            <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info") %>
+                            <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                          <% else %>
+                            <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;") %>
+                            <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                          <% end %>
+                        </td>
+                      <% end %>
                     </tr>
                 <% end %>
 
@@ -58,11 +103,100 @@
       </div>
   </div>
 
+  <div class="row">
+    <h4 class="center" id="my_finish_label"></h4>
+    <%= link_to("再练习一次", case_path(@case), class:"btn btn-info", style: "display: none;", id: "my_refresh_btn") %>
+  </div>
+
   <div row>
     <div class="col-md-offset-10">
-      <button type="button" class="btn btn-danger">当前总用时</button>
+      <h4>总计： <span id="my_total_time_label"><%= @grade.round_time_str %></span></h4>
     </div>
   </div>
 </body>
 
-<%= render "timer", locals: { case: @case } %>
+
+<script>
+
+var countUpDate
+var x
+var distance
+var task_index
+
+function myTimer() {
+  var now = new Date().getTime();
+  var k = Math.floor(Date.now() / 1000);
+  console.log(k);
+  distance = now - countUpDate;
+
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById("timer_label_"+task_index).innerHTML = hours + "小时 "
+  + minutes + "分 " + seconds + "秒 ";
+  console.log(task_index)
+}
+
+$('[id^="my_start_btn_"').on('click', function(){
+    countUpDate = new Date();
+    console.log($(this).attr('id'))
+    task_index = $(this).attr('id').replace( /\D+/g, '');
+    x = setInterval(function(){myTimer()}, 1000);
+    $(this).hide();
+    $("#my_stop_btn_"+task_index).show();
+})
+
+$('[id^="my_stop_btn_"]').on('click', function(evt){
+  evt.preventDefault();
+  clearInterval(x);
+  var url = $(this).attr("href")
+  console.log(url)
+
+  $.ajax({
+    url: url,
+    method: "POST",
+    beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+    dataType: "json",
+    data: {
+      practice_time: distance,
+      task_id: parseInt(task_index)
+    },
+    success: function(data){
+      var practice_time = data["practice_time"];
+      $("#timer_label_"+task_index).replaceWith('<span id="timer_label_' + data["task_id"] + '">' + practice_time + '</span>');
+      $("#my_total_time_label").text(data["total_time"]);
+      $("#my_stop_btn_"+task_index).hide();
+      next_index = parseInt(task_index)+1;
+      console.log(next_index)
+      if (data["finish"] == "") {
+        console.log(123456);
+        console.log("#my_start_btn_"+next_index);
+        $("#my_start_btn_"+next_index).show();
+      }else{
+        $("#my_finish_label").text(data["finish"]);
+        $("#my_refresh_btn").show();
+      }
+    }
+  })
+
+  distance = 0;
+})
+
+
+function myStopFunction() {
+  clearInterval(x);
+  distance = 0;
+  document.getElementById("demo").innerHTML = 0 + "小时 "
+  + 0 + "分 " + 0 + "秒 ";
+}
+
+function myStartFunction() {
+
+  countUpDate = new Date();
+  x = setInterval(function(){myTimer()}, 1000);
+}
+
+
+</script>

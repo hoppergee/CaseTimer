@@ -38,12 +38,16 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootstrap-sass'
 gem 'awesome_rails_console'
 gem 'devise'
+gem 'nested_form_fields'
+gem 'simple_form'
+gem 'will_paginate'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'sqlite3'
   gem 'pry'
+  gem 'pry-byebug'
 end
 
 group :development do

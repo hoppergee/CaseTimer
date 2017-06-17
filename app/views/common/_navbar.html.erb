@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-</head>
 
-<body>
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">WebSiteName</a>
+      <a class="navbar-brand" href="/">全栈营计时器</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
+      <li class="active"><%= link_to("排行榜", root_path) %></li>
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="#">Page 1-1</a></li>
@@ -23,6 +18,7 @@
     <ul class="nav navbar-nav navbar-right">
       <% if current_user %>
         <li><h3 style="color: white;"><%= current_user.email %></h3></li>
+        <li><h4 style="colof: white;"><%= link_to("注销", destroy_user_session_path, method: :delete) %></h4></li>
       <% else %>
         <li>
           <%= link_to new_user_registration_path do %>
@@ -34,13 +30,7 @@
             <span class="glyphicon glyphicon-user"></span> Log in
           <% end %>
         </li>
-        <% end %>
+      <% end %>
     </ul>
   </div>
 </nav>
-
-<div class="container">
-</div>
-
-</body>
-</html>
