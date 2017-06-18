@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   		post :update_timer
   		post :select_template
       get :ranking
-      # post :update_goal
+      post :update_goal
   	end
   end
 

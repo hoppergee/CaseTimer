@@ -60,10 +60,23 @@ class CasesController < ApplicationController
 		end
 		@grades = Grade.where(user_id: current_user, case_id: @case, finish: true).order("updated_at")
 		@task_templates_groups = TaskTemplatesGroup.where(user: current_user, case: @case)
+		@current_percent = goal_percent_in(@case)
 	end
 
 	def update_goal
-		
+		@case = Case.find(params[:id])
+		favor = Favor.find_by(user: current_user, case: @case)
+		goal = params[:goal].to_i
+		if goal > 1 && goal < 100
+			favor.goal = goal
+			favor.save!
+		end
+		current_percent = goal_percent_in(@case)
+
+		render :json => {
+			goal: favor.goal,
+			current_percent: current_percent
+		}
 	end
 
 	def select_template
@@ -88,11 +101,13 @@ class CasesController < ApplicationController
 		if @task.siblings.last.done?
 			@grade.finish = true
 			@grade.save
+			current_percent = goal_percent_in(@case)
 			render :json => {
 				practice_time: humanize(@practice_time.to_i/1000),
 				task_id: @task.id,
 				total_time: humanize(@grade.round_time/1000),
-				finish: "恭喜，全部完成"
+				current_percent: current_percent,
+				finish: "恭喜，顺利完成本轮练习"
 			}
 		else
 			render :json => {
@@ -133,6 +148,17 @@ class CasesController < ApplicationController
 				"#{n.to_i} #{name}"
 			end
 		}.compact.reverse.join(' ')
+	end
+
+	def goal_percent_in(case_item)
+		grades = Grade.where(user: current_user, case: case_item, finish: true)
+		favor = Favor.find_by(user: current_user, case: case_item)
+		current_percent = '%.2f' % (grades.count.to_f/favor.goal.to_f * 100)
+		if current_percent.to_f >= 100
+			"100%"
+		else
+			"#{current_percent}%"
+		end
 	end
 
 end
