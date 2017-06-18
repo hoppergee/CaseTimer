@@ -1,8 +1,11 @@
 <br>
 <%= link_to ranking_case_path(@case) ,style: "color: black;" do  %>
-<h2 class="text-center"><%= @case.title %> 排行榜</h2>
+<h2 class="text-center"><%= @case.title %> 排行榜<br><small><%= link_to "返回", case_path(@case), class: "label label-default"%></small></h2>
 <% end %>
+
 <br>
+
+
 
 <% if @round_users %>
 <div class="col-md-6 col-md-offset-3">

@@ -1,119 +1,140 @@
-<head>
-  <style>
-   .row{
-     text-align: center;
-   }
-  </style>
-</head>
+<script src="//cdn.bootcss.com/Chart.js/2.5.0/Chart.bundle.min.js"></script>
 
-<body>
   <div class="row">
     <h1 style="text-align: center"> <%= @case.title %> </h1>
   </div>
 
+  <br><br>
+
   <div class="row">
-    <div>平均用时: <span><%= average_time_of(@grades) %></span></div>
-    <div>练习次数: <span><%= round_of(@grades) %></span></div>
-    <div>最快纪录: <span><%= fastest_time_of(@grades) %></span></div>
-    <div>总练习时长: <span><%= total_time_of(@grades) %></span></div>
+  <%= link_to tasks_path(case_id: @case) do %>
+      <div class="col-md-5 col-md-offset-1">
+        <canvas id="my_round_time_chart" width="400" height="200"></canvas>
+      </div>
 
-    <div>目标轮次：<span><%= @favor.goal %></span></div>
-
-    <% @grades.each_with_index do |grade, index| %>
-      <div>第<%= index+1 %>次，用时<%= grade.round_time_str %></div>
-    <% end %>
+      <div class="col-md-5">
+        <canvas id="my_day_round_chart" width="400" height="200"></canvas>
+      </div>
+      <% end %>
   </div>
+
+  <br>
+    <div class="row text-center">
+    <%= link_to("排行榜", ranking_case_path, class: "btn btn-default") %>
+  </div>
+  <br>
 
   <div class="row">
     <div class="col-md-4 col-md-offset-4">
+      <table class="table table-striped text-center">
+        <tbody>
+          <tr>
+            <td><small>平均用时</small> <h3><%= average_time_of(@grades) %></h3></td>
+            <td><small>练习次数</small> <h3><%= round_of(@grades) %></h3></td>
+          </tr>
+          <tr>
+            <td><small>最快纪录</small> <h3><%= fastest_time_of(@grades) %></h3></td>
+            <td><small>总练习时长</small> <h3><%= total_time_of(@grades) %></h3></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
       <div class="progress">
         <div class="progress-bar progress-bar-info" id="my_goal_progress" role="progressbar" aria-valuenow="<%= @current_percent %>"
         aria-valuemin="0" aria-valuemax="100" style="<%= "width: #{@current_percent}" %>">
-          完成<%= @current_percent %>
+          目标<%= @favor.goal %>次,已完成<%= @current_percent %>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="row">
-    <%= form_tag update_goal_case_path(@case), class: "form-inline", id: "my_goal_form" do %>
-      <label for="">目标练习遍数：</label>
-      <%= text_field_tag "goal", @favor.goal , class: "form-control text-center", id: "my_goal_label", style: "width: 50px;", disabled: true %>
-      <button class="btn btn-primary", id="my_goal_edit_btn">更改</button>
-      <%= submit_tag "保存", class: "btn btn-danger", style: "display: none;", id: "my_goal_update_btn" %>
-    <% end %>
-
-  </div>
-
-
+  <br><br>
 
   <div class="row">
-    <div class="">
-        <div class="container">
-            <div class="dropdown">
-              <button class="btn btn-default dropdown-toggle pull-left" data-toggle="dropdown">
-                <%= "模版#{@task_templates_groups.index(@favor.group)+1}" %>
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">                
-                <% @task_templates_groups.each_with_index do |group, index| %>
-                  <li><%= link_to("模版#{index+1}", select_template_case_path(@case, group_id: group), method: :post) %></li>
-                <% end %>
-              </ul>
-            </div>
-            <%= link_to("+创建新模版", new_task_templates_group_path(case_id: @case), class:"btn btn-default pull-left") %>
-            <%= link_to("查看所有练习信息", tasks_path(case_id: @case), class: "btn btn-default") %>
-            <%= link_to("排行榜", ranking_case_path, class: "btn btn-danger") %>
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>步骤</th>
-                  <th>步骤描述</th>
-                  <th>步骤计时</th>
-                  <th>计时</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @tasks.each_with_index do |task, index| %>
-                    <tr>
-                      <td>第<%= index+1 %>步</td>
-                      <td><%= task.title %></td>
-                      <% t = @tasks.find{|x| !x.practice_time.present?} %>
-                      <% if task.practice_time.present? %>
-                        <td><span id="timer_label_<%= task.id %>"><%= task.practice_time_str %></span></td>
-                        <td></td>
-                      <% else %>
-                        <td><span id="timer_label_<%= task.id %>"></span></td>
-                        <td>
-                          <% if t == task %>
-                            <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info") %>
-                            <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
-                          <% else %>
-                            <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;") %>
-                            <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
-                          <% end %>
-                        </td>
-                      <% end %>
-                    </tr>
-                <% end %>
+    <div class="col-md-8 col-md-offset-2">
 
-              </tbody>
-            </table>
-        </div>
+      <div class="row pull-right">
+        <%= form_tag update_goal_case_path(@case), class: "form-inline", id: "my_goal_form" do %>
+          <label for="">目标练习遍数：</label>
+          <%= text_field_tag "goal", @favor.goal , class: "form-control text-center", id: "my_goal_label", style: "width: 50px;", disabled: true %>
+          <button class="btn btn-primary", id="my_goal_edit_btn">更改</button>
+          <%= submit_tag "保存", class: "btn btn-danger", style: "display: none;", id: "my_goal_update_btn" %>
+        <% end %>
       </div>
-  </div>
 
-  <div class="row">
-    <h4 class="center" id="my_finish_label"></h4>
-    <%= link_to("再练习一次", case_path(@case), class:"btn btn-info", style: "display: none;", id: "my_refresh_btn") %>
-  </div>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle pull-left" data-toggle="dropdown">
+          <%= "模版#{@task_templates_groups.index(@favor.group)+1}" %>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">                
+          <% @task_templates_groups.each_with_index do |group, index| %>
+            <li><%= link_to("模版#{index+1}", select_template_case_path(@case, group_id: group), method: :post) %></li>
+          <% end %>
+        </ul>
+      </div>
 
-  <div row>
-    <div class="col-md-offset-10">
+      <%= link_to new_task_templates_group_path(case_id: @case), class:"btn btn-default pull-left" do %>
+        <span style="color: red;">+ </span>创建新模版
+      <% end %>
+
+      <br><br><br>
+
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th class="text-center">步骤</th>
+            <th class="text-center">步骤描述</th>
+            <th class="text-center">步骤计时</th>
+            <th class="text-center">计时</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @tasks.each_with_index do |task, index| %>
+              <tr>
+                <td>第<%= index+1 %>步</td>
+                <td><%= task.title %></td>
+                <% t = @tasks.find{|x| !x.practice_time.present?} %>
+                <% if task.practice_time.present? %>
+                  <td><span id="timer_label_<%= task.id %>"><%= task.practice_time_str %></span></td>
+                  <td></td>
+                <% else %>
+                  <td><span id="timer_label_<%= task.id %>"></span></td>
+                  <td>
+                    <% if t == task %>
+                      <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info") %>
+                      <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                    <% else %>
+                      <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;") %>
+                      <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                    <% end %>
+                  </td>
+                <% end %>
+              </tr>
+          <% end %>
+
+        </tbody>
+      </table>
       <h4>总计： <span id="my_total_time_label"><%= @grade.round_time_str %></span></h4>
     </div>
   </div>
-</body>
+
+  <div class="row">
+    <div class="text-center">
+      <h4 class="center" id="my_finish_label"></h4>
+      <%= link_to("再练习一次", case_path(@case), class:"btn btn-info", style: "display: none;", id: "my_refresh_btn") %>
+    </div>
+  </div>
+
+  <br><br>
+
+
 
 
 <script>
@@ -126,7 +147,6 @@ var task_index
 function myTimer() {
   var now = new Date().getTime();
   var k = Math.floor(Date.now() / 1000);
-  console.log(k);
   distance = now - countUpDate;
 
   var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -134,9 +154,8 @@ function myTimer() {
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-  document.getElementById("timer_label_"+task_index).innerHTML = hours + "小时 "
-  + minutes + "分 " + seconds + "秒 ";
-  console.log(task_index)
+  // document.getElementById("timer_label_"+task_index).innerHTML = hours + "小时 " + minutes + "分 " + seconds + "秒 ";
+  document.getElementById("timer_label_"+task_index).innerHTML = humanize(parseInt(distance/1000))
 }
 
 $('[id^="my_start_btn_"').on('click', function(){
@@ -233,5 +252,77 @@ $("#my_goal_update_btn").click(function(event){
   })
 })
 
+//每遍用时图表
+var ctx = document.getElementById("my_round_time_chart");
+  function humanize(secs){
+    var a = [[60, "秒"],[60, "分"],[24, "小时"],[1000, "天"]].map(function(x){
+      if (secs > 0) {
+        m = secs%x[0];
+        secs = Math.floor(secs/x[0]);
+        return (m + x[1])
+      }
+    }).filter(x => !!x).reverse().join(' ')
+    return a
+  }
+  var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: <%= [*1..@grades.count] %>,
+          datasets: [{
+              label: '每轮练习用时',
+              data: <%= @grades.map{|g| g.round_time} %>,
+              // borderWidth: 1
+              backgroundColor: 'rgba(0, 0, 0, 0)',
+              borderColor: 'rgba(255, 99, 132, 0.7)'
+
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true,
+                      callback: function(value, index, values) {
+                        return humanize(value/1000);
+                      }
+                  }
+              }]
+          },
+          tooltips: {
+            callbacks: {
+                label: function(tooltipItems, data) {
+                  return humanize(parseInt(tooltipItems.yLabel/1000));
+                }
+            }
+        }
+      }
+  });
+
+  //practice time per day
+  var ptpd = document.getElementById("my_day_round_chart");
+
+  var my_day_round_chart = new Chart(ptpd, {
+      type: 'bar',
+      data: {
+          labels: <%= raw (@grades.first.updated_at.to_date..Date.today).to_a.to_json %>,
+          datasets: [{
+              label: '每天完成次数',
+              data: <%= @grades.group_by_day(:updated_at).count.values %>,
+              // borderWidth: 1
+              backgroundColor: 'rgba(127, 190, 221, 0.5)',
+              // borderColor: 'rgba(255, 99, 132, 0.7)'
+
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+  });
 
 </script>

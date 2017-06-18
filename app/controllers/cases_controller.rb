@@ -61,6 +61,8 @@ class CasesController < ApplicationController
 		@grades = Grade.where(user_id: current_user, case_id: @case, finish: true).order("updated_at")
 		@task_templates_groups = TaskTemplatesGroup.where(user: current_user, case: @case)
 		@current_percent = goal_percent_in(@case)
+
+		# @time_array = (@grades.first.updated_at.to_date..Date.today).to_a
 	end
 
 	def update_goal

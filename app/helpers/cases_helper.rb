@@ -3,7 +3,7 @@ module CasesHelper
 	def round_of(grades)
 		if grades.size != 0
 			round = grades.sort_by{|g| g.created_at}.last.round
-			"#{round} 次"
+			"#{round}次"
 		else
 			"暂无"
 		end
