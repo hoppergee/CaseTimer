@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170619034431) do
+ActiveRecord::Schema.define(version: 20170619075810) do
 
   create_table "cases", force: :cascade do |t|
     t.datetime "created_at",  null: false
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20170619034431) do
     t.text     "description"
     t.integer  "user_id"
     t.string   "image"
+    t.index [nil], name: "index_cases_on_task_tempaltes_group_id"
   end
 
   create_table "favors", force: :cascade do |t|

@@ -117,9 +117,13 @@
                     <% unless current_user.is_super_admin? %>
                       <% if t == task %>
                         <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info") %>
+                        <%= button_tag('暂停', id:"my_pause_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
+                        <%= button_tag('继续', id:"my_restart_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
                         <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
                       <% else %>
                         <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;") %>
+                        <%= button_tag('暂停', id:"my_pause_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
+                        <%= button_tag('继续', id:"my_restart_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
                         <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
                       <% end %>
                     <% end %>
@@ -151,28 +155,48 @@
 var countUpDate
 var x
 var distance
+var history_time = 0;
 var task_index
+var isPaused = false;
 
 function myTimer() {
   var now = new Date().getTime();
-  var k = Math.floor(Date.now() / 1000);
+  // var k = Math.floor(Date.now() / 1000);
   distance = now - countUpDate;
 
-  // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  // var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  // document.getElementById("timer_label_"+task_index).innerHTML = hours + "小时 " + minutes + "分 " + seconds + "秒 ";
-  document.getElementById("timer_label_"+task_index).innerHTML = humanize(parseInt(distance/1000))
+  document.getElementById("timer_label_"+task_index).innerHTML = humanize(parseInt((distance + history_time)/1000))
 }
 
-$('[id^="my_start_btn_"').on('click', function(){
+$('[id^="my_start_btn_"]').on('click', function(){
     countUpDate = new Date();
     task_index = $(this).attr('id').replace( /\D+/g, '');
-    x = setInterval(function(){myTimer()}, 1000);
+    x = setInterval(function(){
+      if(!isPaused){
+        myTimer();
+      } 
+    }, 1000);
     $(this).hide();
     $("#my_stop_btn_"+task_index).show();
+    $("#my_pause_btn_"+task_index).show();
+})
+
+$('[id^="my_pause_btn_"]').on('click', function(evt){
+  evt.preventDefault();
+  history_time += distance;
+  task_index = $(this).attr('id').replace( /\D+/g, '');
+  isPaused = true;
+  $(this).hide();
+  $("#my_restart_btn_"+task_index).show();
+})
+
+$('[id^="my_restart_btn_"]').on('click', function(evt){
+  countUpDate = new Date();
+  console.log(countUpDate);
+  evt.preventDefault();
+  task_index = $(this).attr('id').replace( /\D+/g, '');
+  isPaused = false;
+  $(this).hide();
+  $("#my_pause_btn_"+task_index).show();
 })
 
 $('[id^="my_stop_btn_"]').on('click', function(evt){
@@ -186,7 +210,7 @@ $('[id^="my_stop_btn_"]').on('click', function(evt){
     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
     dataType: "json",
     data: {
-      practice_time: distance,
+      practice_time: (distance+history_time),
       task_id: parseInt(task_index)
     },
     success: function(data){
@@ -204,6 +228,8 @@ $('[id^="my_stop_btn_"]').on('click', function(evt){
         $("#my_goal_progress").css("width", data["current_percent"]);
         $("#my_goal_progress").text("完成" + data["current_percent"]);
       }
+      $("#my_pause_btn_"+task_index).hide();
+      $("#my_restart_btn_"+task_index).hide();
     }
   })
 

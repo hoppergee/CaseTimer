@@ -1,23 +1,35 @@
 <h2 class="text-center">超级管理员编辑</h2>
 
 <div class="container">
-	<table class="table table-bordered">
+	<%= link_to("新增", new_admin_case_path, class: "btn btn-primary pull-right") %>
+	<table class="table table-bordered" style="text-align: center;">
 		<thead>
 			<tr>
 				<th>#</th>
 				<th>课程标题</th>
 				<th>首图</th>
-				<th>操作</th>
+				<th colspan="2">操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			<% @cases.each_with_index do |item, index| %>
 				<tr>
-					<td><%= index+1 %></td>
-					<td><%= item.title %></td>
-					<td><%=  %></td>
-					<td>
+					<td class="vert-aligned"><%= index+1 %></td>
+					<td class="vert-aligned"><%= item.title %></td>
+					<td class="vert-aligned">
+						<% if item.image.small.present? %>
+							<%= image_tag(item.image.small.url) %>
+						<% else %>
+							<%= image_tag("http://placehold.it/80x80&text=No Pic") %>
+						<% end %>
+					</td>
+					<td class="vert-aligned">
 						<%= link_to("编辑", edit_admin_case_path(item), class: "btn btn-default") %>
+					</td>
+					<td class="vert-aligned">
+						<%= link_to admin_case_path(item), method: :delete do %>
+							<i class="fa fa-trash" style="font-size: 25px;"></i>
+						<% end %>
 					</td>
 				</tr>
 			<% end %>

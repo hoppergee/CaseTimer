@@ -1,0 +1,48 @@
+<div class="col-md-4 col-md-offset-4">
+	<%= simple_form_for [:admin, @case] do |f| %>
+		<div class="form-group">
+			<%= f.input :title, label: "项目名称", class: "form-control" %>
+		</div>
+
+		<%= f.input :user_id, as: :hidden, input_html: {value: current_user.id} %>
+
+		<%= f.input :image, as: :file %>
+
+		<%= f.fields_for :task_templates_groups do |ff| %>
+
+			<%#= hidden_field_tag "user_id", current_user.id %>
+
+			<%= ff.input :user_id, as: :hidden, input_html: {value: current_user.id} %>
+
+			<%= ff.nested_fields_for :task_templates, (ff.object.task_templates.build if ff.object.task_templates.empty?) do |fff| %>
+				<div class="well">
+					<div class="form-inline">
+						<div class="form-group">
+							<%= fff.input :title, label: "第#{ff.object.templates.find_index(fff.object).to_i + 1}步：",class: "form-control"%>
+						</div>
+						<%= fff.remove_nested_fields_link "移除这个步骤", class: "btn btn-danger pull-right" %>
+					</div>
+				</div>
+
+			<% end %>
+			<p class="text-right">
+				<%= ff.add_nested_fields_link :task_templates, "新增步骤", class: "btn btn-default"  %>
+			</p>
+		<% end %>
+
+		<%= f.submit "提交", class: "btn btn-default" %>
+	<% end %>
+</div>
+
+<script>
+	
+	$(document).on('fields_added.nested_form_fields', function(event, param){
+
+		t_str = $(event.target).prev().find(".control-label").text();
+		t_index_str = t_str.replace( /\D+/g, '');
+		t_index = parseInt(t_index_str)+1;
+		$(event.target).find(".control-label").html('第' + t_index + '步：');
+
+	})
+
+</script>

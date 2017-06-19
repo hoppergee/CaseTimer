@@ -3,7 +3,7 @@ require 'will_paginate/array'
 class CasesController < ApplicationController
 
 	before_action :authenticate_user!, except: [:index]
-	before_action :requrie_not_super_user, only: [:update_goal, :select_template, :update_timer]
+	before_action :requrie_not_super_user, except: [:index]
 
 	def index
 		@standard_cases = Case.where(user_id: "1")

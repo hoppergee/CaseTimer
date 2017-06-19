@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :tasks
   has_many :grades
   has_many :task_groups
-  has_many :task_templates_group
+  has_many :task_templates_groups
   has_many :favors
 
   def is_super_admin?
