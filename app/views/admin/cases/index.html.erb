@@ -1,0 +1,26 @@
+<h2 class="text-center">超级管理员编辑</h2>
+
+<div class="container">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>课程标题</th>
+				<th>首图</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @cases.each_with_index do |item, index| %>
+				<tr>
+					<td><%= index+1 %></td>
+					<td><%= item.title %></td>
+					<td><%=  %></td>
+					<td>
+						<%= link_to("编辑", edit_admin_case_path(item), class: "btn btn-default") %>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>

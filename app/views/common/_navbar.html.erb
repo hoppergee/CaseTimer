@@ -18,7 +18,7 @@
             </a>
             <ul class="dropdown-menu">
               <% if current_user.is_super_admin? %>
-                <li><%= link_to("后台管理", "#") %></li>
+                <li><%= link_to("后台管理", admin_cases_path) %></li>
               <% end %>
               <li><%= link_to("登出", destroy_user_session_path, method: :delete) %></li>
             </ul>

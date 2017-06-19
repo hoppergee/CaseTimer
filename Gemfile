@@ -42,6 +42,10 @@ gem 'nested_form_fields'
 gem 'simple_form'
 gem 'will_paginate'
 gem 'groupdate'
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'carrierwave-qiniu'
+gem 'qiniu-rs'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

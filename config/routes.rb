@@ -17,8 +17,8 @@ Rails.application.routes.draw do
 
   resources :task_templates_groups
 
-  # resources :account do
-  #   resources :favors
-  # end
+  namespace :admin do
+    resources :cases
+  end
 
 end
