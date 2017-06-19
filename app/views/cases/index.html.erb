@@ -2,11 +2,18 @@
   <h1 style="text-align: center"> 全栈营项目学习计时器 </h1>
 </div>
 
-<div class="row">
+<br><br>
+
+<div class="container">
   <% @standard_cases.each do |item| %>
-    <div class="col-md-4">
-      <div class="thumbnail" id="case_thumbnail_<%= item.id %>">
+    <div class="col-md-3">
+      <div class="thumbnail text-center" id="case_thumbnail_<%= item.id %>">
         <%= link_to case_path(item) do %>
+          <% if item.image.present? %>
+            <%= image_tag(item.image.thumb.url, class: "image-thumbnail") %>
+          <% else %>
+            <%= image_tag("http://placehold.it/320x240&text=.", class: "image-thumbnail") %>
+          <% end %>
           <div class="caption">
             <h2><%= item.title %></h2>
           </div>
@@ -17,10 +24,12 @@
 </div>
 
 <% unless @private_cases.blank? %>
+  <hr>
   <% @private_cases.each do |item| %>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="thumbnail" id="case_thumbnail_<%= item.id %>">
         <%= link_to case_path(item) do %>
+
           <div class="caption">
             <h2><%= item.title %></h2>
           </div>
