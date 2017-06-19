@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616045007) do
+ActiveRecord::Schema.define(version: 20170619014100) do
 
   create_table "cases", force: :cascade do |t|
     t.datetime "created_at",  null: false
@@ -32,21 +32,12 @@ ActiveRecord::Schema.define(version: 20170616045007) do
   create_table "grades", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "case_id"
-    t.integer  "task_template_id"
     t.integer  "round_time"
     t.integer  "round"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.boolean  "finish"
-    t.integer  "task_group_id"
     t.integer  "task_templates_group_id"
-  end
-
-  create_table "task_groups", force: :cascade do |t|
-    t.integer  "case_id"
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "task_templates", force: :cascade do |t|
@@ -60,10 +51,8 @@ ActiveRecord::Schema.define(version: 20170616045007) do
   create_table "task_templates_groups", force: :cascade do |t|
     t.integer  "case_id"
     t.integer  "user_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.integer  "target_round"
-    t.index [nil], name: "index_task_templates_groups_on_task_template_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -71,11 +60,9 @@ ActiveRecord::Schema.define(version: 20170616045007) do
     t.datetime "updated_at",       null: false
     t.string   "title"
     t.text     "description"
-    t.integer  "user_id"
     t.integer  "practice_time"
     t.integer  "round"
     t.integer  "task_template_id"
-    t.integer  "task_group_id"
   end
 
   create_table "users", force: :cascade do |t|
