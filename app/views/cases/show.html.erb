@@ -60,30 +60,35 @@
 
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
+      
+      <% unless current_user.is_super_admin? %>
 
-      <div class="row pull-right">
-        <%= form_tag update_goal_case_path(@case), class: "form-inline", id: "my_goal_form" do %>
-          <label for="">目标练习遍数：</label>
-          <%= text_field_tag "goal", @favor.goal , class: "form-control text-center", id: "my_goal_label", style: "width: 50px;", disabled: true %>
-          <button class="btn btn-primary", id="my_goal_edit_btn">更改</button>
-          <%= submit_tag "保存", class: "btn btn-danger", style: "display: none;", id: "my_goal_update_btn" %>
-        <% end %>
-      </div>
-
-      <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle pull-left" data-toggle="dropdown">
-          <%= "模版#{@task_templates_groups.index(@favor.group)+1}" %>
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">                
-          <% @task_templates_groups.each_with_index do |group, index| %>
-            <li><%= link_to("模版#{index+1}", select_template_case_path(@case, group_id: group), method: :post) %></li>
+        <div class="row pull-right">
+          <%= form_tag update_goal_case_path(@case), class: "form-inline", id: "my_goal_form" do %>
+            <label for="">目标练习遍数：</label>
+            <%= text_field_tag "goal", @favor.goal , class: "form-control text-center", id: "my_goal_label", style: "width: 50px;", disabled: true %>
+            <button class="btn btn-primary", id="my_goal_edit_btn">更改</button>
+            <%= submit_tag "保存", class: "btn btn-danger", style: "display: none;", id: "my_goal_update_btn" %>
           <% end %>
-        </ul>
-      </div>
+        </div>
+      
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle pull-left" data-toggle="dropdown">
+            <%= "模版#{@task_templates_groups.index(@favor.group)+1}" %>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">                
+            <% @task_templates_groups.each_with_index do |group, index| %>
+              <li><%= link_to("模版#{index+1}", select_template_case_path(@case, group_id: group), method: :post) %></li>
+            <% end %>
+          </ul>
+        </div>
+      
+      
+        <%= link_to new_task_templates_group_path(case_id: @case), class:"btn btn-default pull-left" do %>
+          <span style="color: red;">+ </span>创建新模版
+        <% end %>
 
-      <%= link_to new_task_templates_group_path(case_id: @case), class:"btn btn-default pull-left" do %>
-        <span style="color: red;">+ </span>创建新模版
       <% end %>
 
       <br><br><br>
@@ -109,12 +114,14 @@
                 <% else %>
                   <td><span id="timer_label_<%= task.id %>"></span></td>
                   <td>
-                    <% if t == task %>
-                      <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info") %>
-                      <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
-                    <% else %>
-                      <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;") %>
-                      <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                    <% unless current_user.is_super_admin? %>
+                      <% if t == task %>
+                        <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info") %>
+                        <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                      <% else %>
+                        <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;") %>
+                        <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                      <% end %>
                     <% end %>
                   </td>
                 <% end %>

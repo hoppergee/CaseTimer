@@ -11,6 +11,10 @@ class User < ApplicationRecord
   has_many :task_templates_group
   has_many :favors
 
+  def is_super_admin?
+    self.id == 1
+  end
+
   def grades_of(case_id)
     Grade.where(user: self, case_id: case_id, finish:true).order("updated_at")
   end

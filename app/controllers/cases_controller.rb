@@ -3,10 +3,11 @@ require 'will_paginate/array'
 class CasesController < ApplicationController
 
 	before_action :authenticate_user!, except: [:index]
+	before_action :requrie_not_super_user, only: [:update_goal, :select_template, :update_timer]
 
 	def index
 		@standard_cases = Case.where(user_id: "1")
-		if current_user
+		if current_user && !current_user.is_super_admin?
 			@private_cases = Case.where(user_id: current_user.id)
 		end
 	end
@@ -143,6 +144,8 @@ class CasesController < ApplicationController
 
 	end
 
+	private
+
 	def humanize(secs)
 		[[60, "秒"], [60, "分"], [24, "小时"], [1000, "天"]].map{|count, name|
 			if secs > 0
@@ -160,6 +163,12 @@ class CasesController < ApplicationController
 			"100%"
 		else
 			"#{current_percent}%"
+		end
+	end
+
+	def requrie_not_super_user
+		if current_user.is_super_admin?
+			redirect_to :back
 		end
 	end
 
