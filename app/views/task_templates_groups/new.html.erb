@@ -2,6 +2,8 @@
 <div class="page-header">
 <h3>创建一个新的练习模版</h3>
 </div>
+<%= link_to "返回", case_path(@case), class: "btn btn-default pull-right" %>
+<br><br>
 
 <%= simple_form_for  @group do |f| %>
 	<%= f.nested_fields_for :task_templates do |ff| %>

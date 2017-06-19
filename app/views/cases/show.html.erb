@@ -6,8 +6,9 @@
 
   <br><br>
 
+  <%# unless @grades.empty? %>
   <div class="row">
-  <%= link_to tasks_path(case_id: @case) do %>
+    <%= link_to tasks_path(case_id: @case) do %>
       <div class="col-md-5 col-md-offset-1">
         <canvas id="my_round_time_chart" width="400" height="200"></canvas>
       </div>
@@ -15,8 +16,9 @@
       <div class="col-md-5">
         <canvas id="my_day_round_chart" width="400" height="200"></canvas>
       </div>
-      <% end %>
+    <% end %>
   </div>
+  <%# end %>
 
   <br>
     <div class="row text-center">
@@ -149,10 +151,10 @@ function myTimer() {
   var k = Math.floor(Date.now() / 1000);
   distance = now - countUpDate;
 
-  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  // var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
   // document.getElementById("timer_label_"+task_index).innerHTML = hours + "小时 " + minutes + "分 " + seconds + "秒 ";
   document.getElementById("timer_label_"+task_index).innerHTML = humanize(parseInt(distance/1000))
@@ -160,7 +162,6 @@ function myTimer() {
 
 $('[id^="my_start_btn_"').on('click', function(){
     countUpDate = new Date();
-    console.log($(this).attr('id'))
     task_index = $(this).attr('id').replace( /\D+/g, '');
     x = setInterval(function(){myTimer()}, 1000);
     $(this).hide();
@@ -171,7 +172,6 @@ $('[id^="my_stop_btn_"]').on('click', function(evt){
   evt.preventDefault();
   clearInterval(x);
   var url = $(this).attr("href")
-  console.log(url)
 
   $.ajax({
     url: url,
@@ -190,8 +190,6 @@ $('[id^="my_stop_btn_"]').on('click', function(evt){
       next_index = parseInt(task_index)+1;
       console.log(next_index)
       if (data["finish"] == "") {
-        console.log(123456);
-        console.log("#my_start_btn_"+next_index);
         $("#my_start_btn_"+next_index).show();
       }else{
         $("#my_finish_label").text(data["finish"]);
@@ -231,8 +229,6 @@ $("#my_goal_update_btn").click(function(event){
   event.preventDefault();
   var url = $("#my_goal_form").attr("action");
   var round = $("#my_goal_label").val();
-  console.log(url);
-  console.log(round);
 
   $.ajax({
     url: url,
@@ -254,49 +250,56 @@ $("#my_goal_update_btn").click(function(event){
 
 //每遍用时图表
 var ctx = document.getElementById("my_round_time_chart");
-  function humanize(secs){
-    var a = [[60, "秒"],[60, "分"],[24, "小时"],[1000, "天"]].map(function(x){
-      if (secs > 0) {
-        m = secs%x[0];
-        secs = Math.floor(secs/x[0]);
-        return (m + x[1])
-      }
-    }).filter(x => !!x).reverse().join(' ')
-    return a
-  }
-  var myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-          labels: <%= [*1..@grades.count] %>,
-          datasets: [{
-              label: '每轮练习用时',
-              data: <%= @grades.map{|g| g.round_time} %>,
-              // borderWidth: 1
-              backgroundColor: 'rgba(0, 0, 0, 0)',
-              borderColor: 'rgba(255, 99, 132, 0.7)'
 
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true,
-                      callback: function(value, index, values) {
-                        return humanize(value/1000);
-                      }
-                  }
-              }]
-          },
-          tooltips: {
-            callbacks: {
-                label: function(tooltipItems, data) {
-                  return humanize(parseInt(tooltipItems.yLabel/1000));
+function humanize(secs){
+  if (secs == 0){
+    return "0秒";
+  }
+  var a = [[60, "秒"],[60, "分"],[24, "小时"],[1000, "天"]].map(function(x){
+    if (secs > 0) {
+      m = secs%x[0];
+      secs = Math.floor(secs/x[0]);
+      return (m + x[1])
+    }
+  }).filter(x => !!x).reverse().join(' ')
+  
+  return a;
+  
+}
+
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: <%= @grades.empty? ? [1,2,3] : [*1..@grades.count] %>,
+        datasets: [{
+            label: '每轮练习用时',
+            data: <%= @grades.empty? ? [0,0,0] : @grades.map{|g| g.round_time} %>,
+            // borderWidth: 1
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgba(255, 99, 132, 0.7)'
+
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true,
+                    callback: function(value, index, values) {
+                      return humanize(parseInt(value/1000));
+                    }
                 }
-            }
-        }
+            }]
+        },
+        tooltips: {
+          callbacks: {
+              label: function(tooltipItems, data) {
+                return humanize(parseInt(tooltipItems.yLabel/1000));
+              }
+          }
       }
-  });
+    }
+});
 
   //practice time per day
   var ptpd = document.getElementById("my_day_round_chart");
@@ -304,10 +307,10 @@ var ctx = document.getElementById("my_round_time_chart");
   var my_day_round_chart = new Chart(ptpd, {
       type: 'bar',
       data: {
-          labels: <%= raw (@grades.first.updated_at.to_date..Date.today).to_a.to_json %>,
+          labels: <%= raw @grades.empty? ? (3.day.ago.to_date..Date.today).to_a.to_json : (@grades.first.updated_at.to_date..Date.today).to_a.to_json   %>,
           datasets: [{
               label: '每天完成次数',
-              data: <%= @grades.group_by_day(:updated_at).count.values %>,
+              data: <%= @grades.empty? ? [0,0,0] : @grades.group_by_day(:updated_at).count.values %>,
               // borderWidth: 1
               backgroundColor: 'rgba(127, 190, 221, 0.5)',
               // borderColor: 'rgba(255, 99, 132, 0.7)'

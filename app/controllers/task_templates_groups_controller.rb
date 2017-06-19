@@ -2,6 +2,7 @@ class TaskTemplatesGroupsController < ApplicationController
 	before_action :authenticate_user!
 
 	def new
+		@case = Case.find(params[:case_id])
 		@group = TaskTemplatesGroup.new(case_id: params[:case_id])
 		@group.task_templates.build
 	end

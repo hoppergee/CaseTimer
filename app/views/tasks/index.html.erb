@@ -1,3 +1,9 @@
+<div class="text-center">
+	<h2>步骤计时详表</h2>
+</div>
+<div class="container">
+<%= link_to "返回", case_path(@case), class: "btn btn-danger pull-right" %>
+<br><br>
 <% @task_templates_groups.each_with_index do |group, index| %>
 	<div class="panel panel-default">
 		<div class="panel-heading">模版<%= index %></div>
@@ -21,3 +27,4 @@
 		</table>
 	</div>
 <% end %>
+</div>
