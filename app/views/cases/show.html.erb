@@ -105,15 +105,15 @@
         <tbody>
           <% @tasks.each_with_index do |task, index| %>
               <tr>
-                <td>第<%= index+1 %>步</td>
-                <td><%= task.title %></td>
+                <td class="col-md-3">第<%= index+1 %>步</td>
+                <td class="col-md-3"><%= task.title %></td>
                 <% t = @tasks.find{|x| !x.practice_time.present?} %>
                 <% if task.practice_time.present? %>
-                  <td><span id="timer_label_<%= task.id %>"><%= task.practice_time_str %></span></td>
-                  <td></td>
+                  <td class="col-md-3"><span id="timer_label_<%= task.id %>"><%= task.practice_time_str %></span></td>
+                  <td class="col-md-3"></td>
                 <% else %>
-                  <td><span id="timer_label_<%= task.id %>"></span></td>
-                  <td>
+                  <td class="col-md-3"><span id="timer_label_<%= task.id %>"></span></td>
+                  <td class="col-md-3">
                     <% unless current_user.is_super_admin? %>
                       <% if t == task %>
                         <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info") %>
@@ -168,6 +168,7 @@ function myTimer() {
 }
 
 $('[id^="my_start_btn_"]').on('click', function(){
+    isPaused = false;
     countUpDate = new Date();
     task_index = $(this).attr('id').replace( /\D+/g, '');
     x = setInterval(function(){
@@ -182,7 +183,6 @@ $('[id^="my_start_btn_"]').on('click', function(){
 
 $('[id^="my_pause_btn_"]').on('click', function(evt){
   evt.preventDefault();
-  history_time += distance;
   task_index = $(this).attr('id').replace( /\D+/g, '');
   isPaused = true;
   $(this).hide();
@@ -190,6 +190,7 @@ $('[id^="my_pause_btn_"]').on('click', function(evt){
 })
 
 $('[id^="my_restart_btn_"]').on('click', function(evt){
+  history_time += distance;
   countUpDate = new Date();
   console.log(countUpDate);
   evt.preventDefault();
@@ -234,6 +235,7 @@ $('[id^="my_stop_btn_"]').on('click', function(evt){
   })
 
   distance = 0;
+  history_time = 0;
 })
 
 
