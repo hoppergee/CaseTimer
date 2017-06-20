@@ -47,6 +47,7 @@ gem 'mini_magick'
 gem 'figaro'
 gem 'fog'
 gem 'font-awesome-rails'
+gem 'redis'
 
 #omniauth
 gem 'omniauth'
