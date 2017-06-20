@@ -122,16 +122,16 @@
                   <td class="col-md-3">
                     <% unless current_user.is_super_admin? %>
                       <% if t == task %>
-                        <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info") %>
-                        <%= button_tag('暂停', id:"my_pause_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
+                        <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", disabled_with: "starting...") %>
+                        <%= button_tag('暂停', id:"my_pause_btn_#{task.id}", class: "btn btn-default", style: "display: none;", disabled_with: "pausing...") %>
                         <%= button_tag('继续', id:"my_restart_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
-                        <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                        <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;", disabled_with: "Stoping..." %>
                         <%= button_tag('停止通知', id: "my_stop_notify_#{task.id}", style: "display: none;") %>
                       <% else %>
-                        <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;") %>
-                        <%= button_tag('暂停', id:"my_pause_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
+                        <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;", disabled_with: "starting...") %>
+                        <%= button_tag('暂停', id:"my_pause_btn_#{task.id}", class: "btn btn-default", style: "display: none;", disabled_with: "starting...") %>
                         <%= button_tag('继续', id:"my_restart_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
-                        <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                        <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;", disabled_with: "Stoping..."%>
                         <%= button_tag('停止通知', id: "my_stop_notify_#{task.id}", style: "display: none;") %>
                       <% end %>
                     <% end %>
