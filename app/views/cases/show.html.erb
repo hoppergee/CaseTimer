@@ -354,7 +354,7 @@ var myChart = new Chart(ctx, {
           labels: <%= raw @grades.empty? ? (3.day.ago.to_date..Date.today).to_a.to_json : (@grades.first.updated_at.to_date..Date.today).to_a.to_json   %>,
           datasets: [{
               label: '每天完成次数',
-              data: <%= @grades.empty? ? [0,0,0] : @grades.group_by_day(:updated_at).count.values %>,
+              data: <%= @grades.empty? ? [0,0,0] : @grades.unscoped.group_by_day(:updated_at).count.values %>,
               // borderWidth: 1
               backgroundColor: 'rgba(127, 190, 221, 0.5)',
               // borderColor: 'rgba(255, 99, 132, 0.7)'
