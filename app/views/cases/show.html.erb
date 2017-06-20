@@ -27,7 +27,7 @@
   <br>
 
   <div class="row">
-    <div class="col-md-4 col-md-offset-4">
+    <div class="col-md-4 col-md-offset-2">
       <table class="table table-striped text-center">
         <tbody>
           <tr>
@@ -40,6 +40,12 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="panel panel-default col-md-4" id="realtime_task" style="height: 220px; overflow-y: scroll;">
+      <% @realtime_tasks.each do |item| %>
+        <%= render partial: "tasks/task", locals: {task: item} %>
+      <% end %>
     </div>
   </div>
 
@@ -120,11 +126,13 @@
                         <%= button_tag('暂停', id:"my_pause_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
                         <%= button_tag('继续', id:"my_restart_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
                         <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                        <%= button_tag('停止通知', id: "my_stop_notify_#{task.id}", style: "display: none;") %>
                       <% else %>
                         <%= button_tag('开始', id:"my_start_btn_#{task.id}", class: "btn btn-info", style: "display: none;") %>
                         <%= button_tag('暂停', id:"my_pause_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
                         <%= button_tag('继续', id:"my_restart_btn_#{task.id}", class: "btn btn-default", style: "display: none;") %>
                         <%= link_to "停止", update_timer_case_path(@case), id:"my_stop_btn_#{task.id}", class: "btn btn-danger", style: "display: none;" %>
+                        <%= button_tag('停止通知', id: "my_stop_notify_#{task.id}", style: "display: none;") %>
                       <% end %>
                     <% end %>
                   </td>
@@ -231,6 +239,7 @@ $('[id^="my_stop_btn_"]').on('click', function(evt){
       }
       $("#my_pause_btn_"+task_index).hide();
       $("#my_restart_btn_"+task_index).hide();
+      $("#my_stop_notify_"+task_index).click();
     }
   })
 

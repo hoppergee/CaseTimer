@@ -1,3 +1,22 @@
 // Place all the styles related to the tasks controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.my_flash_task {
+	animation: my_flash_task_animation 1s;
+	-webkit-animation: my_flash_task_animation 1s;
+}
+
+@keyframes my_flash_task_animation
+{
+    0%   {background: none;}
+    50%  {background: yellow;}
+    100%   {background: none;}
+}
+
+@-webkit-keyframes my_flash_task_animation /* Safari 与 Chrome */
+{
+    0%   {background: none;}
+    50%  {background: yellow;}
+    100%   {background: none;}
+}

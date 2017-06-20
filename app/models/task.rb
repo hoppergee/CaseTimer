@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+	after_update_commit { TaskBroadcastJob.perform_later self}
 	# belongs_to :user
 	belongs_to :task_template
 	# belongs_to :task_group
@@ -21,6 +22,10 @@ class Task < ApplicationRecord
 		if self.practice_time.present?
 			humanize(self.practice_time/1000)
 		end
+	end
+
+	def user
+		self.task_template.group.user
 	end
 
 
