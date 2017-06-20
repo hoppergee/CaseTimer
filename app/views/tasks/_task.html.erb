@@ -3,9 +3,9 @@
 	<p class="my_flash_task">
 		<span style="color: red;"><%= task.updated_at.strftime('%H:%M') %></span>
 		&nbsp;&nbsp;&nbsp;
-		<%= task.user.email %>
+		<span style="color: purple;"><%= task.user.name %></span>
 		完成了<span style="color: blue;"><%= task.task_template.group.case.title %></span>
-		中的<%= task.task_template.title %>，
+		中的「<%= task.task_template.title %>」，
 		用时：<span style="color: red;"><%= humanize(task.practice_time/1000) %></span>
 	</p>
 </div>
