@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20170620104720) do
     t.text     "description"
     t.integer  "user_id"
     t.string   "image"
-    t.index [nil], name: "index_cases_on_task_tempaltes_group_id"
   end
 
   create_table "favors", force: :cascade do |t|
@@ -56,6 +55,7 @@ ActiveRecord::Schema.define(version: 20170620104720) do
     t.string   "title"
     t.text     "description"
     t.integer  "task_templates_group_id"
+    t.index ["task_templates_group_id"], name: "index_task_templates_on_task_templates_group_id"
   end
 
   create_table "task_templates_groups", force: :cascade do |t|
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20170620104720) do
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["case_id"], name: "index_task_templates_groups_on_case_id"
   end
 
   create_table "tasks", force: :cascade do |t|
