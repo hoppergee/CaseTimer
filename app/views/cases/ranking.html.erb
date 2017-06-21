@@ -26,7 +26,7 @@
 				<% @round_users.each_with_index do |user, index| %>
 					<tr>
 						<td><%= index+1 %></td>
-						<td><%= user.email %></td>
+						<td><%= user.name %></td>
 						<td><%= user.round_of(@case.id) %>次</td>
 					</tr>
 				<% end %>
@@ -52,7 +52,7 @@
 			<% @average_users.each_with_index do |user, index| %>
 				<tr>
 					<td><%= index+1 %></td>
-					<td><%= user.email %></td>
+					<td><%= user.name %></td>
 					<td><%= humanize(user.average_time_of(@case.id)/1000) %></td>
 				</tr>
 			<% end %>
@@ -78,7 +78,7 @@
 				<% @fast_users.each_with_index do |user, index| %>
 					<tr>
 						<td><%= index+1 %></td>
-						<td><%= user.email %></td>
+						<td><%= user.name %></td>
 						<td><%= humanize(user.fastest_time_of(@case.id)/1000) %></td>
 					</tr>
 				<% end %>
@@ -104,7 +104,7 @@
 				<% @total_users.each_with_index do |user, index| %>
 					<tr>
 						<td><%= index+1 %></td>
-						<td><%= user.email %></td>
+						<td><%= user.name %></td>
 						<td><%= humanize(user.total_time_of(@case.id)/1000) %></td>
 					</tr>
 				<% end %>
