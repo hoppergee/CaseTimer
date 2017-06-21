@@ -49,6 +49,8 @@ gem 'fog'
 gem 'font-awesome-rails'
 gem 'redis'
 
+gem 'chart-js-rails'
+
 #omniauth
 gem 'omniauth'
 gem 'omniauth-github'

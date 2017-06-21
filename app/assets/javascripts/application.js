@@ -15,4 +15,5 @@
 //= require turbolinks
 //= require bootstrap/dropdown
 //= require nested_form_fields
+//= require Chart.min
 //= require_tree .
