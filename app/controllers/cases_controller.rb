@@ -66,9 +66,9 @@ class CasesController < ApplicationController
 		# @time_array = (@grades.first.updated_at.to_date..Date.today).to_a
 		@realtime_tasks = Task.where.not(practice_time: nil).order('updated_at DESC').limit(10)
 
-		if Rails.env.production?
-			@tasks.reverse
-		end
+		# if Rails.env.production?
+		# 	@tasks.reverse
+		# end
 	end
 
 	def update_goal
