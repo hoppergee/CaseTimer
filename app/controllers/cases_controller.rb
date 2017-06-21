@@ -40,7 +40,8 @@ class CasesController < ApplicationController
 				round = @grades.last.round + 1
 				@grade = Grade.create(user: current_user, case: @case, group: favor_group, finish: false, round: round, round_time: 0)
 				@tasks = []
-				favor_group.templates.order("id").each do |template|
+				templates = favor_group.templates.order("id")
+				templates.each do |template|
 					task = Task.create!(round: round, task_template_id: template.id, title: template.title, description: template.description)
 					@tasks << task
 				end
