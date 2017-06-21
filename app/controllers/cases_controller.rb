@@ -19,7 +19,7 @@ class CasesController < ApplicationController
 		if @grades.blank?
 			official_group = TaskTemplatesGroup.where(user_id: 1, case_id: @case).first
 			@templates_group = TaskTemplatesGroup.create(user: current_user, case: @case)
-			official_templates = official_group.templates
+			official_templates = official_group.templates.order("id")
 			@grade = Grade.create(user: current_user, case: @case, group: @templates_group, finish: false, round: 1, round_time: 0)
 			@favor = Favor.create!(user: current_user, case: @case, group: @templates_group)
 			@tasks = []
@@ -40,14 +40,14 @@ class CasesController < ApplicationController
 				round = @grades.last.round + 1
 				@grade = Grade.create(user: current_user, case: @case, group: favor_group, finish: false, round: round, round_time: 0)
 				@tasks = []
-				favor_group.templates.each do |template|
+				favor_group.templates.order("id").each do |template|
 					task = Task.create!(round: round, task_template_id: template.id, title: template.title, description: template.description)
 					@tasks << task
 				end
 			else
 				@grade = current_group_grades.last
 				# @templates_group = @favor.group
-				@task_templates = favor_group.templates
+				@task_templates = favor_group.templates.order("id")
 				round = current_group_grades.last.round
 				# binding.pry
 				@tasks = []
