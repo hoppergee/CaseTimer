@@ -8,5 +8,8 @@ class ApplicationRecord < ActiveRecord::Base
 				"#{n.to_i} #{name}"
 			end
 		}.compact.reverse.join(' ')
+		if secs == 0
+			"0秒"
+		end
 	end
 end

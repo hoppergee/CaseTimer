@@ -93,7 +93,12 @@ class CasesController < ApplicationController
 	end
 
 	def update_timer
-		@practice_time = params[:practice_time]
+		# binding.pry
+		if params[:practice_time] == "NaN"
+			@practice_time = 0
+		else
+			@practice_time = params[:practice_time]
+		end
 		@case = Case.find(params[:id])
 		@task = Task.find(params[:task_id])
 		@task.practice_time = @practice_time
@@ -154,6 +159,9 @@ class CasesController < ApplicationController
 				"#{n.to_i} #{name}"
 			end
 		}.compact.reverse.join(' ')
+		if secs == 0
+			"0秒"
+		end
 	end
 
 	def goal_percent_in(case_item)
