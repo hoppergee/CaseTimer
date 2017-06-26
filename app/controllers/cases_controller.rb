@@ -65,7 +65,8 @@ class CasesController < ApplicationController
 		@current_percent = goal_percent_in(@case)
 
 		# @time_array = (@grades.first.updated_at.to_date..Date.today).to_a
-		@realtime_tasks = Task.where.not(practice_time: nil).order('updated_at DESC').limit(10)
+		# @realtime_tasks = Task.where.not(practice_time: nil).order('updated_at DESC').limit(10)
+		@realtime_tasks = Task.where("practice_time > 1000").order('updated_at DESC').limit(10)
 
 		# if Rails.env.production?
 		# 	@tasks.reverse

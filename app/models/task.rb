@@ -1,5 +1,5 @@
 class Task < ApplicationRecord
-	after_update_commit { TaskBroadcastJob.perform_later self}
+	after_update_commit { TaskBroadcastJob.perform_later self if self.practice_time.to_i > 1000}
 	# belongs_to :user
 	belongs_to :task_template
 	# belongs_to :task_group
