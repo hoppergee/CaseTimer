@@ -1,0 +1,29 @@
+<h1 class="text-centr">版本文章后台</h1>
+
+<%= link_to "新建", new_admin_article_path, class: "btn btn-default pull-right" %>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>版本</th>
+			<th>标题</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @articles.each_with_index do |article, index| %>
+			<tr>
+				<td><%= index+1 %></td>
+				<td><%= article.title %></td>
+				<td>
+					<%= link_to("编辑", edit_admin_article_path(article)) %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+
+
+	
+

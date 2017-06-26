@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'articles/index'
+
   devise_for :users, :controllers => {:omniauth_callbacks => "omniauth_callbacks"}
 
   root "cases#index"
@@ -19,7 +21,10 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :cases
+    resources :articles
   end
+
+  resources :articles
 
   mount ActionCable.server => '/cable'
 

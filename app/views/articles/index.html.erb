@@ -1,0 +1,11 @@
+
+<h1 class="text-center">版本更新详情</h1>
+<% @articles.each do |article| %>
+	<div class="article-content">
+		<h2><%= article.title %></h2>
+		<div class="markdown">
+			<%= markdown(article.content) %>
+		</div>
+	</div>
+<% end %>
+

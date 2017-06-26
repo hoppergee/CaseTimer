@@ -1,6 +1,6 @@
 class Admin::CasesController < ApplicationController
 	before_action :authenticate_user!
-	before_action :require_is_super_use
+	before_action :require_is_super_user
 
 	def index
 		@cases = Case.where(user_id: 1)
@@ -44,10 +44,6 @@ class Admin::CasesController < ApplicationController
 	end
 
 	private
-
-	def require_is_super_use
-		current_user.is_super_admin?
-	end
 
 	def case_params
 		params.require(:case).permit(:title, :user_id, :image, task_templates_groups_attributes: [:id, :user_id, :_destroy, :task_templates_attributes => [:id, :title, :_destroy]])

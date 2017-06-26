@@ -14,4 +14,8 @@ class ApplicationController < ActionController::Base
 		devise_parameter_sanitizer.permit :sign_up, keys: added_attrs
 		devise_parameter_sanitizer.permit :account_update, keys: added_attrs<<:current_password
 	end
+
+	def require_is_super_user
+		current_user.is_super_admin?
+	end
 end
