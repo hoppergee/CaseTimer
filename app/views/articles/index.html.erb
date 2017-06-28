@@ -1,5 +1,14 @@
 
-<h1 class="text-center">版本更新详情</h1>
+<h1 class="text-center">
+<% if @category == "tech" %>
+	技术文章分享
+<% elsif @category == "edition"  %>
+	版本更新详情
+<% else %>
+	所有文字
+<% end %>
+
+</h1>
 <% @articles.each do |article| %>
 	<div class="article-content">
 		<h2><%= article.title %></h2>
