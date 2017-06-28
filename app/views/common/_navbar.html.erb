@@ -6,7 +6,8 @@
     </div>
     <div class="collapse navbar-collapse">
     <ul class="nav navbar-nav">
-      <li><%= link_to "版本更新", articles_path %></li>
+      <li><%= link_to "版本更新", articles_path(category: "edition") %></li>
+      <li><%= link_to "技术分享", articles_path(category: "tech") %></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li>
@@ -22,7 +23,8 @@
             <ul class="dropdown-menu">
               <% if current_user.is_super_admin? %>
                 <li><%= link_to("后台管理", admin_cases_path) %></li>
-                <li><%= link_to("版本文章发布", admin_articles_path) %></li>
+                <li><%= link_to("版本文章发布", admin_articles_path(category: "edition")) %></li>
+                <li><%= link_to("技术分享发布", admin_articles_path(category: "tech")) %></li>
               <% end %>
               <li><%= link_to("登出", destroy_user_session_path, method: :delete) %></li>
             </ul>

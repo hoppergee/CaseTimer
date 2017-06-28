@@ -3,7 +3,11 @@ class Admin::ArticlesController < ApplicationController
 	before_action :require_is_super_user
 
 	def index
-		@articles = Article.all
+	  	if category = params[:category]
+	  		@articles = Article.where(category: category).order("created_at DESC")
+	  	else
+	  		@articles = Article.all.order("created_at DESC")
+	  	end
 	end
 
 	def new
@@ -45,6 +49,6 @@ class Admin::ArticlesController < ApplicationController
 	private
 
 	def article_params
-		params.require(:article).permit(:title,:content)
+		params.require(:article).permit(:title,:content,:category)
 	end
 end
