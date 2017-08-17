@@ -440,6 +440,7 @@ DEPENDENCIES
   redis
   rouge
   sass-rails (~> 5.0)
+  sidekiq
   simple_form
   sqlite3
   turbolinks (~> 5)
