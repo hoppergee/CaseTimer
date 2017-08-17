@@ -36,8 +36,9 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  config.action_cable.url = 'wss://casetimer.herokuapp.com/cable'
-  config.action_cable.allowed_request_origins = [ 'https://casetimer.herokuapp.com', /http:\/\/casetimer.*/ ]
+  #config.action_cable.url = 'wss://casetimer.herokuapp.com/cable'
+  #config.action_cable.allowed_request_origins = [ 'https://casetimer.herokuapp.com', /http:\/\/casetimer.*/ ]
+  config.action_cable.allowed_request_origins = [ 'http://172.104.97.241/' ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
